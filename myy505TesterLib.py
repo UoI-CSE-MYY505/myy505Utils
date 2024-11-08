@@ -392,6 +392,14 @@ def checkSimResults(expected, coreDumpData, labelMap):
                     reg = e[1]
                 if regValues[reg] != expectedV:
                     check.append(e[4] + " Got %d, expected %d (%s)" %(regValues[reg], expectedV, e[3]))
+            elif e[0] == "sr": # signed register
+                if re.search("[a-z]", e[1]): # register name
+                    reg = str(regNameMap[e[1]])
+                else:
+                    reg = e[1]
+                temp = twos_comp(regValues[reg], 32)
+                if temp != expectedV:
+                    check.append(e[4] + " Got %d, expected %d (%s)" %(temp, expectedV, e[3]))
             else:
                 if e[0] == "sb": #signed byte
                     size = 1
